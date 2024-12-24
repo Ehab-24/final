@@ -22,7 +22,7 @@ function Navbar() {
                         <TextButton onClick={() => navigate("/")}>Home</TextButton>
                     </li>
                     <li>
-                        <TextButton onClick={() => navigate("/bookings")}>Bookings</TextButton>
+                        <TextButton onClick={() => navigate("/tasks")}>Tasks</TextButton>
                     </li>
                 </ul>
             </div>

@@ -6,17 +6,16 @@ import * as TokensManager from "../lib/TokensManager"
 import SubmitButton from "../components/buttons/SubmitButton";
 import { toast } from "react-toastify";
 import { useAuth } from "../lib/AuthContext";
+import H1 from "../components/typography/H1";
 
 export default function CreateTaskPage() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-            {/* Header */}
             <header className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Create a new task</h1>
+                <H1>Create a new task</H1>
             </header>
 
-            {/* Property Details */}
             <section className="mb-8">
                 <p className="mt-4 text-gray-600">
                     Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
@@ -53,11 +52,12 @@ function TaskForm() {
         e.preventDefault();
 
         const token = TokensManager.getToken()
-        if (!token) {
+        if (!token)
+            return
+        if (!!formData.heading) {
+            toast.error('Heading field is required!')
             return
         }
-
-        console.log('creating task', formData.heading, formData.description)
 
         let result = await api.createTask(
             token,
@@ -66,21 +66,12 @@ function TaskForm() {
             'pending',
         )
 
-        if (!!result) {
-            if (result === 1) { // Assume that the token has expired
-                toast.warn("Session expired!")
-                logout()
-                navigate('/login')
-            } else if (result === 0) {
-                toast.error("Error creating task, please try again later.")
-            } else {
-                toast(`New task created!`)
-                console.log("Task", result)
-            }
+        if (!!result && !result.error) {
+            toast(`New task created!`)
+            console.log("Task", result)
         } else {
-            toast.error("Error creating task, please try again later.")
+            toast.error(`Error creating task, ${result.error}.`)
         }
-
     };
 
     return (

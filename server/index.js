@@ -62,11 +62,11 @@ function authenticateAdmin(req, res, next) {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         if (!decoded || decoded.role !== 'admin')
-            res.status(403).json({error: 'You are not authorized to perform this operation'});
+            res.status(403).json({ error: 'You are not authorized to perform this operation' });
         req.user = decoded;
         next();
     } catch (err) {
-        res.status(403).json({ error : 'Invalid token'});
+        res.status(403).json({ error: 'Invalid token' });
     }
 }
 
@@ -78,7 +78,7 @@ function authenticateUser(req, res, next) {
         req.user = decoded;
         next();
     } catch (err) {
-        res.status(403).json({ error: 'Invalid token'});
+        res.status(403).json({ error: 'Invalid token' });
     }
 }
 
@@ -121,20 +121,32 @@ app.get('/user', authenticateUser, async (req, res) => {
 // Tasks
 
 app.get('/tasks', authenticateUser, async (_, res) => res.json(await Task.find()));
+
 app.get('/tasks/:id', authenticateUser, async (req, res) => res.json(await Task.findById(req.params.id)));
+
+app.delete('/tasks/:id', authenticateUser, async (req, res) => {
+    res.json(await Task.findByIdAndDelete(req.params.id))
+});
+
 app.post('/tasks', authenticateUser, async (req, res) => {
-    const missingField = findMissingField(req.body, ['title', 'description', 'year', 'ratings', 'director'])
+    const payload = req.body
+    const missingField = findMissingField(payload, ['heading', 'description'])
     if (!!missingField)
         return res.status(400).json({ error: `Missing required field '${missingField}'` })
-    res.json(await Task.create(req.body))
+    payload.createdAt = Date.now()
+    payload.updatedAt = Date.now()
+    payload.status = 'pending'
+    res.json(await Task.create(payload))
 });
+
 app.put('/tasks/:id', authenticateUser, async (req, res) => {
-    const missingField = findMissingField(req.body, ['title', 'description', 'year', 'ratings', 'director'])
+    const payload = req.body
+    const missingField = findMissingField(payload, ['heading', 'description', 'status', 'createdAt'])
     if (!!missingField)
         return res.status(400).json({ error: `Missing required field '${missingField}'` })
-    res.json(await Task.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+    payload.updatedAt = Date.now()
+    res.json(await Task.findByIdAndUpdate(req.params.id, payload, { new: true }))
 });
-app.delete('/tasks/:id', authenticateUser, async (req, res) => res.json(await Task.findByIdAndDelete(req.params.id)));
 
 
 ///////////////////////////////////////////////////
