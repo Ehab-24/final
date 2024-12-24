@@ -5,7 +5,9 @@ function HomePage() {
     return (
         <div className="flex px-4 md:px-12 flex-col mb-20">
             <Searchbar className="self-center mb-20 mt-12" />
-            <H2>Products</H2>
+            <div className="self-center">
+                <H2>Maybe I could havbe added a search functionality 🤔</H2>
+            </div>
         </div>
     )
 }

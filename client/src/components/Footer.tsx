@@ -9,12 +9,12 @@ export default function Footer() {
 
             <div className="w-full flex md:px-20">
                 <div className="flex w-1/2 justify-start">
-                    <img src="/Screenshot 2024-10-04 at 09.50.35.jpg" alt="BookNest" className="ml-20 w-80 h-80 object-contain" />
+                    <img src="/Screenshot 2024-10-04 at 09.50.35.jpg" alt="TaskDoom" className="ml-20 w-80 h-80 object-contain" />
                 </div>
 
                 <div className="flex flex-col w-1/2 py-8">
 
-                    <h2 className="text-3xl md:text-5xl font-serif">BookNest</h2>
+                    <h2 className="text-3xl md:text-5xl font-serif">TaskDoom</h2>
 
                     <div className="flex w-full mt-12">
 
