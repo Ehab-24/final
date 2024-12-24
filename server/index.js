@@ -35,14 +35,14 @@ const UserSchema = new Schema({
 });
 const User = model('User', UserSchema);
 
-const MovieSchema = new Schema({
-    title: String,
+const TaskSchema = new Schema({
+    heading: String,
     description: String,
-    ratings: Number,
-    director: String,
-    year: Number,
+    status: String, // One of 'pending', 'completed', 'aborted', 'paused'
+    createdAt: Number,
+    updatedAt: Number,
 });
-const Movie = model('Movie', MovieSchema);
+const Task = model('Task', TaskSchema);
 
 ///////////////////////////////////////////////////
 /// HELPERS
@@ -118,23 +118,23 @@ app.get('/user', authenticateUser, async (req, res) => {
     res.status(200).json({ user: req.user })
 })
 
-// Movies (Example)
+// Tasks
 
-app.get('/movies', async (_, res) => res.json(await Movie.find()));
-app.get('/movies/:id', async (req, res) => res.json(await Movie.findById(req.params.id)));
-app.post('/movies', authenticateAdmin, async (req, res) => {
+app.get('/tasks', authenticateUser, async (_, res) => res.json(await Task.find()));
+app.get('/tasks/:id', authenticateUser, async (req, res) => res.json(await Task.findById(req.params.id)));
+app.post('/tasks', authenticateUser, async (req, res) => {
     const missingField = findMissingField(req.body, ['title', 'description', 'year', 'ratings', 'director'])
     if (!!missingField)
         return res.status(400).json({ error: `Missing required field '${missingField}'` })
-    res.json(await Movie.create(req.body))
+    res.json(await Task.create(req.body))
 });
-app.put('/movies/:id', authenticateAdmin, async (req, res) => {
+app.put('/tasks/:id', authenticateUser, async (req, res) => {
     const missingField = findMissingField(req.body, ['title', 'description', 'year', 'ratings', 'director'])
     if (!!missingField)
         return res.status(400).json({ error: `Missing required field '${missingField}'` })
-    res.json(await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+    res.json(await Task.findByIdAndUpdate(req.params.id, req.body, { new: true }))
 });
-app.delete('/movies/:id', authenticateAdmin, async (req, res) => res.json(await Movie.findByIdAndDelete(req.params.id)));
+app.delete('/tasks/:id', authenticateUser, async (req, res) => res.json(await Task.findByIdAndDelete(req.params.id)));
 
 
 ///////////////////////////////////////////////////

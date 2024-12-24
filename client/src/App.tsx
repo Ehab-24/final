@@ -7,6 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AuthProvider from "./lib/AuthContext";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 import HomePage from "./pages/HomePage";
+import CreateTaskPage from "./pages/CreateTaskPage";
 
 function App() {
     return (
@@ -16,7 +17,7 @@ function App() {
                     <Route element={<HomeLayout />}>
                         <Route path="/" element={<HomePage />} />
                         <Route element={<PrivateRoute />}>
-                            {/* Add routes for logged in users here */}
+                            <Route path="/tasks/create" element={<CreateTaskPage />} />
                         </Route>
                     </Route>
                     <Route element={<UnauthenticatedRoute />}>
