@@ -36,6 +36,7 @@ const UserSchema = new Schema({
 const User = model('User', UserSchema);
 
 const TaskSchema = new Schema({
+    user: String,
     heading: String,
     description: String,
     status: String, // One of 'pending', 'completed', 'aborted', 'paused'
@@ -120,7 +121,9 @@ app.get('/user', authenticateUser, async (req, res) => {
 
 // Tasks
 
-app.get('/tasks', authenticateUser, async (_, res) => res.json(await Task.find()));
+app.get('/tasks', authenticateUser, async (req, res) => {
+    res.json(await Task.find({ user: req.user.id }))
+});
 
 app.get('/tasks/:id', authenticateUser, async (req, res) => res.json(await Task.findById(req.params.id)));
 
@@ -133,6 +136,7 @@ app.post('/tasks', authenticateUser, async (req, res) => {
     const missingField = findMissingField(payload, ['heading', 'description'])
     if (!!missingField)
         return res.status(400).json({ error: `Missing required field '${missingField}'` })
+    payload.user = req.user.id
     payload.createdAt = Date.now()
     payload.updatedAt = Date.now()
     payload.status = 'pending'

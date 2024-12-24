@@ -71,7 +71,7 @@ export default function TasksPage() {
                 <ul className="flex flex-col gap-12 w-full">
                     {
                         tasks.map(t => (
-                            <TaskListItem key={t.id} task={t} removeTask={removeTask} />
+                            <TaskListItem key={t._id} task={t} removeTask={removeTask} />
                         ))
                     }
                 </ul>
