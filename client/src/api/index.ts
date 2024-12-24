@@ -102,7 +102,7 @@ export async function createTask(token: string, heading: string, description: st
 
 export async function updateTask(token: string, task: any): Promise<any> {
     try {
-        let response = await fetch(apiURL(`tasks/${task.id}`), {
+        let response = await fetch(apiURL(`tasks/${task._id}`), {
             method: 'PUT',
             body: JSON.stringify(task),
             headers: {

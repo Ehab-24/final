@@ -1,11 +1,9 @@
 
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import * as api from "../api"
 import * as TokensManager from "../lib/TokensManager"
 import SubmitButton from "../components/buttons/SubmitButton";
 import { toast } from "react-toastify";
-import { useAuth } from "../lib/AuthContext";
 import H1 from "../components/typography/H1";
 
 export default function CreateTaskPage() {
@@ -31,9 +29,6 @@ export default function CreateTaskPage() {
 
 function TaskForm() {
 
-    const navigate = useNavigate()
-    const { logout } = useAuth()
-
     const [formData, setFormData] = useState({
         heading: "",
         description: "",
@@ -54,7 +49,7 @@ function TaskForm() {
         const token = TokensManager.getToken()
         if (!token)
             return
-        if (!!formData.heading) {
+        if (!formData.heading) {
             toast.error('Heading field is required!')
             return
         }

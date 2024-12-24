@@ -11,6 +11,7 @@ import CreateTaskPage from "./pages/CreateTaskPage";
 import TasksPage from "./pages/TasksPage";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import UpdateTaskPage from "./pages/UpdateTaskPage";
 
 function App() {
 
@@ -23,8 +24,9 @@ function App() {
                     <Route element={<HomeLayout />}>
                         <Route path="/" element={<HomePage />} />
                         <Route element={<PrivateRoute />}>
-                            <Route path="/tasks/create" element={<CreateTaskPage />} />
                             <Route path="/tasks" element={<TasksPage />} />
+                            <Route path="/tasks/create" element={<CreateTaskPage />} />
+                            <Route path="/tasks/edit/:taskId" element={<UpdateTaskPage />} />
                         </Route>
                     </Route>
                     <Route element={<UnauthenticatedRoute />}>

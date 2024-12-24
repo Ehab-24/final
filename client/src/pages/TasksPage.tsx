@@ -11,6 +11,7 @@ import OutlinedButton from "../components/buttons/OutlinedButton"
 import DestructiveButton from "../components/buttons/DestructiveButton"
 import { toast } from "react-toastify";
 import Button from "../components/buttons/Button";
+import BreadCrum from "../components/BreadCrum";
 
 export default function TasksPage() {
 
@@ -103,10 +104,11 @@ function TaskListItem({ task, removeTask }: { task: any, removeTask: (id: string
                         <ReactTimeAgo date={Date(task.updatedAt)} />
                     </p>
                 </div>
+                <BreadCrum bgColor={getStatusColor(task.status)}>{task.status}</BreadCrum>
                 <p className="text-sm text-gray-900 leading-relaxed tracking-wide">{task.description}</p>
             </div>
             <div className="flex flex-col h-full min-h-full gap-4 justify-center items-end">
-                <OutlinedButton onClick={() => { navigate('/tasks/edit') }}>
+                <OutlinedButton onClick={() => { navigate(`/tasks/edit/${task._id}`) }}>
                     Edit
                 </OutlinedButton>
                 <DestructiveButton onClick={() => { removeTask(task._id) }}>
@@ -115,4 +117,9 @@ function TaskListItem({ task, removeTask }: { task: any, removeTask: (id: string
             </div>
         </li>
     )
+}
+
+function getStatusColor(status: string): string {
+    return status === 'pending' ? 'bg-yellow-200' : status === 'completed' ? 'bg-green-200'
+        : status === 'paused' ? 'bg-red-200' : status === 'aborted' ? 'bg-purple-200' : 'bg-blue-200';
 }
